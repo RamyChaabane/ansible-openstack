@@ -31,7 +31,7 @@ options:
         required: true
     state:
         description:
-            - state of the volume type
+            - state of the volume type present=created| absent=deleted
         default: present
         choices:
             - present
