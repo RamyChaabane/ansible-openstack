@@ -9,3 +9,5 @@ Those modules have been developped using:
   - python 2.7 (should work with 3.6)
   - OpenStack API (I didn't use openstacksdk library as the community do)
   - only public endpoints are supported
+
+Those modules are based on os_connect.py script that retrieves OpenStack endpoints with a token to authenticate to OpenStack services. This script should be placed under /usr/lib/python2.7/site_packages/
