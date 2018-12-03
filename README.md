@@ -1,5 +1,5 @@
 # ansible-openstack-modules-API
-Even with the latest version of ansible (2.7), not all openstack modules has been devoplopped by the community.
+With the latest version of ansible (2.7), not all openstack modules has been devoplopped by the community.
 
 For this reason, I created two openstack custom modules:
   - os_volume_type: create/update/delete a volume type
