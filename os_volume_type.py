@@ -1,5 +1,70 @@
 #!/usr/bin/python
 
+# Copyright: (c) 2018, Ramy CHAABANE <ramy.san.chaabane@gmail.com>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+ANSIBLE_METADATA = {
+    'metadata_version': '1.1',
+    'status': ['preview'],
+    'supported_by': ''
+}
+
+DOCUMENTATION = '''
+---
+module: os_volume_type
+
+short_description: Manage OpenStack Volume Type
+
+version_added: "2.7"
+
+description:
+    - "Create, update and delete an OpenStack volume type"
+
+options:
+    cloud:
+        description:
+            - OpenStack authentication parameters
+        required: true
+    volume_type_name:
+        description:
+            - name of the volume type
+        required: true
+    state:
+        description:
+            - state of the volume type
+        default: present
+        choices:
+            - present
+            - absent
+    project:
+        description:
+            - name of the project that the volume type will have access to (default to admin project) 
+        required: False
+    extra_spec:
+        description:
+            - name: set a property on the volume type
+        required: False
+
+author:
+    - Ramy CHAABANE
+'''
+
+EXAMPLES = '''
+- name: Create a volume Type
+  os_volume_type:
+    cloud: overcloud
+    volume_type_name: volumetype01
+    state: present
+    project: demo
+    extra_spec: volume_backend_name='backend01'
+
+- name: Delete a volume Type
+  os_volume_type:
+    cloud: overcloud
+    volume_type_name: volumetype02
+    state: absent
+'''
+
 from ansible.module_utils.basic import *
 import requests
 import os_connect
