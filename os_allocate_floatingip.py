@@ -1,5 +1,65 @@
 #!/usr/bin/python
 
+# Copyright: (c) 2018, Ramy CHAABANE <ramy.san.chaabane@gmail.com>
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+ANSIBLE_METADATA = {
+    'metadata_version': '1.1',
+    'status': ['preview'],
+    'supported_by': ''
+}
+
+DOCUMENTATION = '''
+---
+module: os_allocate_floatingip
+short_description: Manage OpenStack floating ip
+version_added: "2.7"
+description:
+    - "Create, update and delete floating ips"
+    - "A server is not required to create floating ips"
+options:
+    cloud:
+        description:
+            - OpenStack authentication parameters
+        required: true
+    network:
+        description:
+            - name of the network where the floating ip will be created/deleted
+        required: true
+    state:
+        description:
+            - state of the floating ip: present=created|absent=deleted
+        default: present
+        choices:
+            - present
+            - absent
+    project:
+        description:
+            - name of the project that the floating ip will belongs to (default to admin project) 
+        required: False
+    count:
+        description:
+            - set the number of floating ips that will be created/deleted (default = 1)
+        required: False
+author:
+    - Ramy CHAABANE
+'''
+
+EXAMPLES = '''
+- name: Create a volume Type
+  os_volume_type:
+    cloud: overcloud
+    volume_type_name: volumetype01
+    state: present
+    project: demo
+    extra_spec: volume_backend_name='backend01'
+- name: Delete a volume Type
+  os_volume_type:
+    cloud: overcloud
+    volume_type_name: volumetype02
+    state: absent
+'''
+
 from ansible.module_utils.basic import *
 import requests
 import os_connect
