@@ -1,9 +1,9 @@
 # ansible-openstack-modules-API
-With the latest version of ansible (2.7), not all openstack modules has been devoplopped by the community.
+With the latest version of ansible (2.7), not all OpenStack modules has been developed by the community.
 
-For this reason, I created two openstack custom modules:
+I created two OpenStack custom modules:
   - __os_volume_type__: create/update/delete a volume type
-  - __os_allocate_floatingip__: create/update/delete a number of floating ips associated to a given network. The server existance with this module is irrelevent
+  - __os_allocate_floatingip__: create/update/delete a number of floating ips associated to a given network. The server existence with this module is irrelevent
 
 Those modules have been developped using:
   - python 2.7 (should work with 3.6)
