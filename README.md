@@ -13,7 +13,8 @@ Those modules have been developped using:
 Those modules are based on os_connect.py script that retrieves OpenStack endpoints with a token to authenticate to OpenStack services. This script should be placed under /usr/lib/python2.7/site_packages/
 
 __Examples__:
-Module: os_volume_type:
+
+Module os_volume_type:
 ```
 - name: Create a volume Type
   os_volume_type:
