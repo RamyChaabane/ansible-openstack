@@ -46,18 +46,19 @@ author:
 '''
 
 EXAMPLES = '''
-- name: Create a volume Type
-  os_volume_type:
+- name: Create 10 floating ip addresses
+  os_allocate_floatingip:
     cloud: overcloud
-    volume_type_name: volumetype01
-    state: present
     project: demo
-    extra_spec: volume_backend_name='backend01'
-- name: Delete a volume Type
-  os_volume_type:
+    state: present
+    count:  10
+    network: privatenet
+- name: Delete floating ip address
+  os_allocate_floatingip:
     cloud: overcloud
-    volume_type_name: volumetype02
-    state: absent
+    project: demo
+    state: present
+    network: privatenet
 '''
 
 from ansible.module_utils.basic import *
