@@ -52,7 +52,7 @@ EXAMPLES = '''
     state: present
     count:  10
     network: privnet
-    
+
 - name: Delete floating ip address
   os_allocate_floatingip:
     cloud: overcloud
@@ -70,11 +70,13 @@ class FloatingIP:
                  neutron_url,
                  target_network,
                  target_project,
-                 check_mode):
+                 check_mode,
+                 verify):
 
         self.neutron_url = neutron_url
         self.target_network = target_network
         self.check_mode = check_mode
+        self.verify = verify
 
         self.headers = {
             'Content-Type': 'application/json',
@@ -82,13 +84,14 @@ class FloatingIP:
             'X-Auth-Token': token,
         }
         params = (
-            ('name',  target_project),
+            ('name', target_project),
         )
 
         projects_api = '{}/projects'.format(keystone_url)
         self.target_project_id = requests.get(projects_api,
                                               headers=self.headers,
-                                              params=params).json()['projects'][0]['id']
+                                              params=params,
+                                              verify=self.verify).json()['projects'][0]['id']
 
         params_project = (
             ('project_id', self.target_project_id),
@@ -97,7 +100,8 @@ class FloatingIP:
         self.floating_api = '{}/v2.0/floatingips'.format(self.neutron_url)
         self.floating_ip_list = requests.get(self.floating_api,
                                              headers=self.headers,
-                                             params=params_project).json()['floatingips']
+                                             params=params_project,
+                                             verify=self.verify).json()['floatingips']
 
     def create(self, count):
 
@@ -113,7 +117,8 @@ class FloatingIP:
             networks_api = '{}/v2.0/networks'.format(self.neutron_url)
             network_id = requests.get(networks_api,
                                       headers=self.headers,
-                                      params=params).json()['networks'][0]['id']
+                                      params=params,
+                                      verify=self.verify).json()['networks'][0]['id']
 
             data_json = dict(
                 floatingip=dict(
@@ -129,7 +134,8 @@ class FloatingIP:
                 try:
                     requests.post(self.floating_api,
                                   headers=self.headers,
-                                  data=data)
+                                  data=data,
+                                  verify=self.verify)
 
                 except requests.exceptions.RequestException as error:
                     return error
@@ -148,7 +154,8 @@ class FloatingIP:
                 for floating_ip in self.floating_ip_list:
                     floating_api_del = '{}/{}'.format(self.floating_api, floating_ip['id'])
                     requests.delete(floating_api_del,
-                                    headers=self.headers)
+                                    headers=self.headers,
+                                    verify=self.verify)
 
             except requests.exceptions.RequestException as error:
                 return error
@@ -160,7 +167,6 @@ class FloatingIP:
 
 
 def main():
-
     fields = {
         "network": {"required": True, "type": "str"},
         "state": {"default": "present", "choices": ['absent', 'present']},
@@ -176,14 +182,20 @@ def main():
     state = module.params['state']
     project_name = module.params['project']
     count = int(module.params['count'])
+    check_mode = module.check_mode
 
     urls, token, verify = os_connect.Connect(cloud_name).authenticate()
+
+    keystone_endpoint = urls['keystone']['publicURL']
+    neutron_endpoint = urls['neutron']['publicURL']
+
     floating_ip = FloatingIP(token,
-                             urls['keystone'],
-                             urls['neutron'],
+                             keystone_endpoint,
+                             neutron_endpoint,
                              network_name,
                              project_name,
-                             module.check_mode)
+                             check_mode,
+                             verify)
 
     if state == "present":
         result = floating_ip.create(count)
