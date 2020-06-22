@@ -42,12 +42,12 @@ Module os_allocate_floatingip:
     project: demo
     state: present
     count:  10
-    network: privatenet
+    network: extnet
     
 - name: Delete floating ip address
   os_allocate_floatingip:
     cloud: overcloud
     project: demo
     state: present
-    network: privatenet
+    network: extnet
 ```
