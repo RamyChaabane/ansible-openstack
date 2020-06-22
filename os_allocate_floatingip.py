@@ -87,7 +87,7 @@ class FloatingIP:
             ('name', target_project),
         )
 
-        projects_api = '{}/projects'.format(keystone_url)
+        projects_api = '{}/v3/projects'.format(keystone_url)
         self.target_project_id = requests.get(projects_api,
                                               headers=self.headers,
                                               params=params,
